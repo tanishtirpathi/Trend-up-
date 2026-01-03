@@ -1,0 +1,40 @@
+import express from "express";
+import dotenv from "dotenv";
+import connectDB from "./DB/index.js";
+import AuthRouter from "./routes/auth.route.js";
+import MessageRoute from "./routes/message.route.js";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import {app ,server} from "./config/socket.js"
+//imports till here
+dotenv.config({
+  path: "../env",
+});
+//cors issue
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+// just for json data
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+const PORT = process.env.PORT || 3000;
+//useless work
+connectDB(); //database connection;
+app.use("/api/auth", AuthRouter); //authentication routes
+app.use("/api/messages", MessageRoute); //Message routes
+app.get("/", (req, res) => {
+  res.send("Backend is alive 🚀");
+});//healthCheck 
+//real time 
+server.listen(PORT, () => {
+  console.log(`server is running here : http://localhost:${PORT}`);
+});
+
+//for not real time 
+// app.listen(PORT, () => {
+//   console.log(`server is running here : http://localhost:${PORT}`);
+// });

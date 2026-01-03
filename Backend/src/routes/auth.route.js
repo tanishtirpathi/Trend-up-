@@ -1,0 +1,18 @@
+import {
+  registerUser,
+  login,
+  logout,
+  MyProfile,
+  UpdateUser,
+} from "../controllers/User.controller.js";
+import express from "express";
+import { upload } from "../middleware/multer.middleware.js";
+import { VerifyJWT } from "../middleware/Auth.Middleware.js";
+const AuthRouter = express.Router();
+//Register Route
+AuthRouter.post("/signup", upload.single("avatar"), registerUser);
+AuthRouter.post("/Login", login);
+AuthRouter.get("/logout", logout);
+AuthRouter.get("/me", VerifyJWT, MyProfile);
+AuthRouter.put("/update", VerifyJWT, upload.single("avatar"), UpdateUser);
+export default AuthRouter;
