@@ -4,7 +4,7 @@ import { ApiError } from "../config/ApiError.js";
 import User from "../models/User.model.js";
 import { AsyncHandler } from "../config/AsyncHandler.js";
 import { uploadOnCloudinary } from "../config/cloudinary.js";
-// import { getReceiveSocketId, io } from "../config/socket.js";
+import { getReceiveSocketId, io } from "../config/socket.js";
 export const getAlLUser = AsyncHandler(async (req, res) => {
   //!logic time buddy
   //get me
@@ -16,7 +16,7 @@ export const getAlLUser = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Sorry User is not authenticated ");
   }
   const OtherUser = await User.find({ _id: { $ne: ThisUser } }).select(
-    "-password"
+    "-password",
   );
   // console.log(OtherUser);
   res
@@ -39,7 +39,7 @@ export const getMessages = AsyncHandler(async (req, res) => {
       { senderId: senderId, receiverId: userChattingId },
       { senderId: userChattingId, receiverId: senderId },
     ],
-  })
+  });
   res
     .status(200)
     .json(new ApiResponse(200, "here is the whole chat", messages));
@@ -72,6 +72,7 @@ export const sendMessage = AsyncHandler(async (req, res) => {
     image: imageUrl,
   });
   await NewMessage.save();
+
   // const receiverSocketIds = getReceiveSocketId(receiverId);
 
   // if (receiverSocketIds) {
@@ -79,7 +80,10 @@ export const sendMessage = AsyncHandler(async (req, res) => {
   //     io.to(socketId).emit("NewMessage", NewMessage);
   //   });
   // }
-
+  const receiverSocketId = getReceiveSocketId(receiverId);
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("NewMessage", NewMessage);
+  }
   res
     .status(201)
     .json(new ApiResponse(201, "Message sent successfully", NewMessage));
