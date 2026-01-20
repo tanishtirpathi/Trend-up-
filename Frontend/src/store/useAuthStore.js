@@ -2,7 +2,7 @@ import { axiosInstants } from "../lib/axios";
 import { create } from "zustand";
 import { io } from "socket.io-client";
 
-const BASE_URL = "http://localhost:4000/";
+const BASE_URL = "https://trend-up-ipbl.onrender.com/";
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isSigningUp: false,
