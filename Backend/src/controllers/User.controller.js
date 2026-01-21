@@ -45,8 +45,8 @@ export const registerUser = AsyncHandler(async (req, res) => {
   );
 const cookieOptions = {
   httpOnly: true,
-  secure: false, // true in production (https)
-  sameSite: "lax",
+  secure: true, // true in production (https)
+  sameSite: "None",
 };
 
   return res
@@ -94,8 +94,8 @@ export const login = AsyncHandler(async (req, res) => {
 
   const cookieOptions = {
   httpOnly: true,
-  secure: false, // true in production (https)
-  sameSite: "lax",
+  secure: true, // true in production (https)
+  sameSite: "None",
 };
 
 return res
