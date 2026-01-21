@@ -8,7 +8,7 @@ export function Profile() {
   const [selectedImage, setSelectedImage] = useState(null);
 
   // Current user
-  const user = authUser?.data?.NewUser ?? null;
+  const user = authUser?? null;
 
   // Handle avatar upload
   const handleImageUpload = async (e) => {
