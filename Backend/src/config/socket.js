@@ -11,6 +11,7 @@ const io = new Server(server, {
   cors: {
     origin: ["https://trend-up.vercel.app","http://localhost:5173"],
   },
+
 });
 
 const OnlineUsersMap = new Map();

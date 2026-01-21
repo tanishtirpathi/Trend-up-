@@ -89,7 +89,7 @@ export const useAuthStore = create((set, get) => ({
   connectSocket: () => {
     const { authUser } = get();
     if (!authUser || get().socket?.connected) return;
-    const socket = io("https://trend-up-ipbl.onrender.com/", {
+    const socket = io("https://trend-up-ipbl.onrender.com", {
       query: {
         userId: authUser._id,
       },
