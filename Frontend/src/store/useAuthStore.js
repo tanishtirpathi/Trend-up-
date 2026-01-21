@@ -2,7 +2,8 @@ import { axiosInstants } from "../lib/axios";
 import { create } from "zustand";
 import { io } from "socket.io-client";
 
-const BASE_URL = "https://trend-up-ipbl.onrender.com/";
+//const BASE_URL = "http://localhost:4000";
+const BASE_URL = "https://trend-up-ipbl.onrender.com";
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isSigningUp: false,
@@ -12,18 +13,26 @@ export const useAuthStore = create((set, get) => ({
   error: null,
   socket: null,
   onlineUser: [],
-  checkAuth: async () => {
+checkAuth: async () => {
+  try {
+    const res = await axiosInstants.get("/auth/me");
+    set({ authUser: res.data.data });
+    get().connectSocket();
+  } catch (error) {
+    // 🔥 TRY REFRESH TOKEN
     try {
+      await axiosInstants.get("/auth/refresh");
       const res = await axiosInstants.get("/auth/me");
-     set({ authUser: res.data.data });
+      set({ authUser: res.data.data });
       get().connectSocket();
     } catch (error) {
-      console.log(`here is your use auth store error ${error}`);
       set({ authUser: null });
-    } finally {
-      set({ isCheckingAuth: false });
     }
-  },
+  } finally {
+    set({ isCheckingAuth: false });
+  }
+},
+
   signUp: async (data) => {
     set({ isSigningUp: true, error: null });
     try {
@@ -89,7 +98,7 @@ export const useAuthStore = create((set, get) => ({
   connectSocket: () => {
     const { authUser } = get();
     if (!authUser || get().socket?.connected) return;
-    const socket = io("https://trend-up-ipbl.onrender.com", {
+    const socket = io(BASE_URL, {
       query: {
         userId: authUser._id,
       },

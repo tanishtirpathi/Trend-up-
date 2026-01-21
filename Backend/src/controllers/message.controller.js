@@ -80,10 +80,12 @@ export const sendMessage = AsyncHandler(async (req, res) => {
   //     io.to(socketId).emit("NewMessage", NewMessage);
   //   });
   // }
-  const receiverSocketId = getReceiveSocketId(receiverId);
-  if (receiverSocketId) {
-    io.to(receiverSocketId).emit("NewMessage", NewMessage);
-  }
+const receiverSocketId = getReceiveSocketId(receiverId);
+
+if (receiverSocketId) {
+  io.to(receiverSocketId).emit("NewMessage", NewMessage);
+}
+
   res
     .status(201)
     .json(new ApiResponse(201, "Message sent successfully", NewMessage));
