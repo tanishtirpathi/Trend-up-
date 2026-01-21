@@ -13,7 +13,7 @@ dotenv.config({
 //cors issue
 app.use(
   cors({
-    origin: "https://trend-up.vercel.app/",
+    origin: ["https://trend-up.vercel.app", "http://localhost:5173"],
     credentials: true,
   })
 );
