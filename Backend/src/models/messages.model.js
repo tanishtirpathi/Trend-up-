@@ -23,6 +23,6 @@ const messageSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
-messageSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 });
+messageSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400  });
 const Message = mongoose.model("Message", messageSchema);
 export default Message;
