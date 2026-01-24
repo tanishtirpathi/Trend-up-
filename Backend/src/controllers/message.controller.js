@@ -58,8 +58,8 @@ export const sendMessage = AsyncHandler(async (req, res) => {
   }
   //*upload image to cloudinary
   let imageUrl = "";
-  if (req.file?.path) {
-    const imageUpload = await uploadOnCloudinary(req.file.path);
+  if (req.file?.buffer) {
+    const imageUpload = await uploadOnCloudinary(req.file.buffer);
     if (!imageUpload?.url) {
       throw new ApiError(400, "Message image upload failed");
     }
