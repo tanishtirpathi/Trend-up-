@@ -21,8 +21,8 @@ export const registerUser = AsyncHandler(async (req, res) => {
     throw new ApiError(409, "User already exists");
   }
   let avatarUrl = "";
-  if (req.file?.path) {
-    const avatarUpload = await uploadOnCloudinary(req.file.path);
+  if (req.file?.buffer) {
+    const avatarUpload = await uploadOnCloudinary(req.file.buffer);
     if (!avatarUpload?.url) {
       throw new ApiError(400, "Avatar upload failed");
     }
@@ -169,10 +169,10 @@ export const UpdateUser = AsyncHandler(async (req, res) => {
     throw new ApiError(401, "Unauthorized");
   }
 
-  if (!req.file?.path) {
+  if (!req.file?.buffer) {
     throw new ApiError(400, "Avatar file is required");
   }
-  const avatarUpload = await uploadOnCloudinary(req.file.path);
+  const avatarUpload = await uploadOnCloudinary(req.file.buffer);
   if (!avatarUpload?.url) {
     throw new ApiError(400, "Avatar upload failed");
   }
