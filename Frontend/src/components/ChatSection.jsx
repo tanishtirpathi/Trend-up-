@@ -12,7 +12,7 @@ function ChatSection() {
     isMessagesLoading,
     selectedUser,
     liveMessages,
-  } = useChatStore();
+  } = useChatStore(); 
   const { socket } = useAuthStore();
 
   const bottomRef = useRef(null);

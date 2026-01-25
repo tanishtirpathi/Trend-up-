@@ -4,6 +4,7 @@ import { Image, Send, X } from "lucide-react";
 
 function FooterInput() {
   const [text, setText] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -31,7 +32,9 @@ function FooterInput() {
   // Send message
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSending) return;
     if (!text.trim() && !imageFile) return;
+    setIsSending(true);
 
     const formData = new FormData();
     formData.append("text", text.trim());
@@ -44,6 +47,8 @@ function FooterInput() {
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.error("Send message failed:", error);
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -100,11 +105,11 @@ function FooterInput() {
           {/* Send button */}
           <button
             type="submit"
-            disabled={!text.trim() && !imageFile}
+            disabled={isSending || (!text.trim() && !imageFile)}
             className="p-3 rounded-xl bg-emerald-500/20 text-emerald-400
               hover:bg-emerald-500/30 transition disabled:opacity-40"
           >
-            <Send size={18} />
+            {isSending ? "Sending…" : <Send size={18} />}
           </button>
         </div>
       </form>
