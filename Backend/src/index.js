@@ -24,6 +24,10 @@ app.use(express.urlencoded({ extended: true }));
 const PORT = process.env.PORT || 3000;
 //useless work
 connectDB(); //database connection;
+app.get("/health", (req, res) => {
+  res.status(200).send("OK");
+});
+
 app.use("/api/auth", AuthRouter); //authentication routes
 app.use("/api/messages", MessageRoute); //Message routes
 app.get("/", (req, res) => {
