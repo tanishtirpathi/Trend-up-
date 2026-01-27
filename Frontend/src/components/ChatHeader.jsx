@@ -48,13 +48,6 @@ function ChatHeader() {
           </p>
         </div>
       </div>
-
-      {/* Right section */}
-      <div className="flex items-center gap-2">
-        <button className="p-2 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition">
-          <Video size={18} />
-        </button>
-      </div>
     </div>
   );
 }
