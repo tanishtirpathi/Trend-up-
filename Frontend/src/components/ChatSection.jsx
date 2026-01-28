@@ -73,6 +73,7 @@ function ChatSection() {
                     <img
                       src={msg.image}
                       alt="sent"
+                      onClick={() => window.open(msg.image, "_blank")}
                       className="mb-2 rounded-lg max-h-60 object-cover"
                     />
                   )}
