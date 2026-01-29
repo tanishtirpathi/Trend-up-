@@ -29,7 +29,7 @@ function ChatHeader() {
           <img
             src={selectedUser.avatar || "/image.png"}
             alt={selectedUser.name}
-            className="h-10 w-10 rounded-full object-cover"
+            className="h-10 w-10 rounded-full object-cover border border-black"
           />
           <span
             className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border border-black

@@ -1,23 +1,28 @@
 import { useChatStore } from "../store/useChatStore";
-import { useEffect } from "react";
 import SidebarSkeleton from "./skeleton/SidebarSkeleton";
 import { Search } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
+import { useEffect, useState, useMemo } from "react";
 
 function Sidebar() {
-  const {
-    getUser,
-    isUserLoading,
-    selectedUser,
-    setSelectedUser,
-    users,
-  } = useChatStore();
+  const { getUser, isUserLoading, selectedUser, setSelectedUser, users } =
+    useChatStore();
 
   const { onlineUser = [] } = useAuthStore();
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     getUser();
   }, [getUser]);
+
+  // ✅ MOVE useMemo ABOVE conditional return
+  const filteredUsers = useMemo(() => {
+    return users?.filter((user) =>
+      user.name.toLowerCase().includes(search.toLowerCase())
+    );
+  }, [users, search]);
+
+  // ✅ NOW safe to return conditionally
   if (isUserLoading) return <SidebarSkeleton />;
 
   return (
@@ -30,6 +35,8 @@ function Sidebar() {
           <input
             type="text"
             placeholder="Search user..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             className="bg-transparent outline-none text-sm text-white placeholder:text-white/40 w-full"
           />
         </div>
@@ -37,14 +44,15 @@ function Sidebar() {
 
       {/* Users */}
       <div className="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-thin scrollbar-thumb-white/10">
-        {users?.length === 0 && (
+        {filteredUsers?.length === 0 && (
           <p className="text-center text-white/40 text-sm mt-6">
             No users found
           </p>
         )}
 
-        {users?.map((user) => {
+        {filteredUsers?.map((user) => {
           const isSelected = selectedUser?._id === user._id;
+
           return (
             <div
               key={user._id}
@@ -65,11 +73,13 @@ function Sidebar() {
                 />
 
                 {/* Online Dot */}
-                {onlineUser.includes(user._id) ? (
-                  <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-green-400 border border-black" />
-                ) : (
-                  <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full bg-red-400 border border-black" />
-                )}
+                <span
+                  className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border border-black ${
+                    onlineUser.includes(user._id)
+                      ? "bg-green-400"
+                      : "bg-red-400"
+                  }`}
+                />
               </div>
 
               {/* User Info */}

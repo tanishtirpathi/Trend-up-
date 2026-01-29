@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Video, Lock, Globe } from "lucide-react";
+import { MessageSquareLock, Lock, Globe } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export function HomePage() {
@@ -71,9 +71,9 @@ export function HomePage() {
           title: "100% Anonymous",
           desc: "No identity revealed. Your privacy is our priority."
         },{
-          icon: <Video size={28} />,
-          title: "Real-Time Video",
-          desc: "Smooth, high-quality video & chat experience."
+          icon: <MessageSquareLock size={28} />,
+          title: "Real-Time chatting",
+          desc: "chat delete after some minute of chatting "
         }].map((item, i) => (
           <motion.div
             key={i}
