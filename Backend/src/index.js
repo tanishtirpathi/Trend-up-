@@ -6,6 +6,8 @@ import MessageRoute from "./routes/message.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import {app ,server} from "./config/socket.js"
+import rateLimit from "express-rate-limit";
+
 //imports till here
 dotenv.config({
   path: "../env",
@@ -17,6 +19,22 @@ app.use(
     credentials: true,
   })
 );
+// rate limits 
+app.set("trust proxy", 1);
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 min
+  max: 100, // max 100 requests per IP
+  message: {
+    status: 429,
+    message: "Too many requests. Try again later."
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+app.use(limiter);
+
 // just for json data
 app.use(cookieParser());
 app.use(express.json());
