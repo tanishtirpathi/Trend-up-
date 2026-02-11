@@ -7,6 +7,14 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import {app ,server} from "./config/socket.js"
 import rateLimit from "express-rate-limit";
+import morgan from "morgan";
+app.use(morgan("dev"));
+import helmet from "helmet";
+
+app.use(helmet());
+import compression from "compression";
+
+app.use(compression());
 
 //imports till here
 dotenv.config({
