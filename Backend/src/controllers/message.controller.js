@@ -87,9 +87,47 @@ const receiverSocketId = getReceiveSocketId(receiverId);
 
 if (receiverSocketId) {
   io.to(receiverSocketId).emit("NewMessage", NewMessage);
+  io.to(receiverSocketId).emit("newNotification", {
+  from: senderId,
+});
+
 }
 
   res
     .status(201)
     .json(new ApiResponse(201, "Message sent successfully", NewMessage));
+});
+export const markMessagesAsSeen = AsyncHandler(async (req, res) => {
+  const { id: chatUserId } = req.params; // the person I am chatting with
+  const currentUserId = req.user._id; // logged-in user
+
+  if (!currentUserId || !chatUserId) {
+    throw new ApiError(400, "Invalid user IDs");
+  }
+
+  const now = new Date(); 
+  const fifteenMinutesLater = new Date(now.getTime() + 15* 60 * 1000);
+ 
+  const updatedMessages = await Message.updateMany(
+    {
+      senderId: chatUserId,
+      receiverId: currentUserId,
+      seen: false,
+    },
+    {
+      $set: {
+        seen: true,
+        seenAt: now,
+        expiresAt: fifteenMinutesLater,
+      },
+    }
+  );
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      "Messages marked as seen",
+      updatedMessages
+    )
+  );
 });

@@ -10,6 +10,7 @@ function ChatSection() {
     unliveMessage,
     getMessages,
     isMessagesLoading,
+      markAsSeen,
     selectedUser,
     liveMessages,
   } = useChatStore();
@@ -29,11 +30,12 @@ function ChatSection() {
   useEffect(() => {
     if (!selectedUser?._id) return;
     getMessages(selectedUser._id);
+    markAsSeen(selectedUser._id);
     if (!socket) return;
     liveMessages();
 
     return () => unliveMessage();
-  }, [selectedUser?._id, getMessages, unliveMessage, liveMessages, socket]);
+  }, [selectedUser?._id, getMessages, markAsSeen , unliveMessage, liveMessages, socket]);
 
   // Auto-scroll to bottom
   useEffect(() => {

@@ -11,6 +11,8 @@ import morgan from "morgan";
 import compression from "compression";
 import helmet from "helmet";
 
+import Message from "./models/messages.model.js";
+import { io } from "./config/socket.js";
 
 //imports till here
 dotenv.config({
@@ -80,6 +82,33 @@ app.use((err, req, res, next) => {
 server.listen(PORT, () => {
   console.log(`server is running here : http://localhost:${PORT}`);
 });
+
+setInterval(async () => {
+  try {
+    const now = new Date();
+
+    const expiredMessages = await Message.find({
+      expiresAt: { $ne: null, $lte: now },
+    });
+
+    if (expiredMessages.length > 0) {
+      const ids = expiredMessages.map((msg) => msg._id);
+
+      await Message.deleteMany({
+        _id: { $in: ids },
+      });
+
+      // Emit deletion event (optional but recommended)
+      ids.forEach((id) => {
+        io.emit("messageDeleted", id);
+      });
+
+      console.log(`Deleted ${ids.length} expired messages`);
+    }
+  } catch (error) {
+    console.log("Cleanup error:", error);
+  }
+}, 30000); // runs every 30 seconds
 
 //for not real time 
 // app.listen(PORT, () => {

@@ -5,8 +5,14 @@ import { useAuthStore } from "../store/useAuthStore";
 import { useEffect, useState, useMemo } from "react";
 
 function Sidebar() {
-  const { getUser, isUserLoading, selectedUser, setSelectedUser, users } =
-    useChatStore();
+  const {
+    getUser,
+    isUserLoading,
+    selectedUser,
+    setSelectedUser,
+    users,
+    unreadCounts,
+  } = useChatStore();
 
   const { onlineUser = [] } = useAuthStore();
   const [search, setSearch] = useState("");
@@ -15,25 +21,24 @@ function Sidebar() {
     getUser();
   }, [getUser]);
 
-  // ✅ MOVE useMemo ABOVE conditional return
-const filteredUsers = useMemo(() => {
-  if (!users) return [];
+  const filteredUsers = useMemo(() => {
+    if (!users) return [];
 
-  const filtered = users.filter((user) =>
-    user.name.toLowerCase().includes(search.toLowerCase())
-  );
+    const filtered = users.filter((user) =>
+      user.name.toLowerCase().includes(search.toLowerCase())
+    );
 
-  // Sort: Online users first
-  filtered.sort((a, b) => {
-    const aOnline = onlineUser.includes(a._id);
-    const bOnline = onlineUser.includes(b._id);
+    // Online users first
+    filtered.sort((a, b) => {
+      const aOnline = onlineUser.includes(a._id);
+      const bOnline = onlineUser.includes(b._id);
 
-    if (aOnline === bOnline) return 0; // keep same order if both same
-    return aOnline ? -1 : 1; // online first
-  });
+      if (aOnline === bOnline) return 0;
+      return aOnline ? -1 : 1;
+    });
 
-  return filtered;
-}, [users, search, onlineUser]);
+    return filtered;
+  }, [users, search, onlineUser]);
 
   if (isUserLoading) return <SidebarSkeleton />;
 
@@ -41,7 +46,6 @@ const filteredUsers = useMemo(() => {
     <div className="h-full w-full flex flex-col bg-black/60 backdrop-blur-xl border-r border-white/10">
       {/* Header */}
       <div className="p-4 border-b border-white/10">
-        {/* Search */}
         <div className="mt-3 flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5">
           <Search className="w-4 h-4 text-white/40" />
           <input
@@ -64,17 +68,17 @@ const filteredUsers = useMemo(() => {
 
         {filteredUsers?.map((user) => {
           const isSelected = selectedUser?._id === user._id;
+          const unread = unreadCounts?.[user._id] || 0;
 
           return (
             <div
               key={user._id}
               onClick={() => setSelectedUser(user)}
-              className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition 
-                ${
-                  isSelected
-                    ? "bg-gradient-to-r from-emerald-500/20 to-cyan-500/20"
-                    : "hover:bg-white/5"
-                }`}
+              className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition ${
+                isSelected
+                  ? "bg-gradient-to-r from-emerald-500/20 to-cyan-500/20"
+                  : "hover:bg-white/5"
+              }`}
             >
               {/* Avatar */}
               <div className="relative">
@@ -92,6 +96,13 @@ const filteredUsers = useMemo(() => {
                       : "bg-red-400"
                   }`}
                 />
+
+                {/* Unread Badge */}
+                {unread > 0 && selectedUser?._id !== user._id && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center font-semibold shadow-md">
+                    {unread}
+                  </span>
+                )}
               </div>
 
               {/* User Info */}
