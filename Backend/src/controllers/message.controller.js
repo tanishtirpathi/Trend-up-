@@ -70,6 +70,9 @@ export const sendMessage = AsyncHandler(async (req, res) => {
     receiverId: receiverId,
     text: text,
     image: imageUrl,
+    seen:false, 
+    seenAt: null ,
+    expireAt: null,
   });
   await NewMessage.save();
 

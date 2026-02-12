@@ -82,7 +82,7 @@ function FooterInput() {
             onChange={(e) => setText(e.target.value)}
             className="flex-1 px-4 py-3 rounded-xl bg-white/5 border border-white/10
               text-sm text-white placeholder:text-white/40
-              focus:outline-none focus:ring-1 focus:ring-emerald-400/40"
+              focus:outline-none focus:ring-1 focus:ring-gray-400/40"
           />
 
           {/* Image upload */}
@@ -106,8 +106,8 @@ function FooterInput() {
           <button
             type="submit"
             disabled={isSending || (!text.trim() && !imageFile)}
-            className="p-3 rounded-xl bg-emerald-500/20 text-emerald-400
-              hover:bg-emerald-500/30 transition disabled:opacity-40"
+            className="p-3 rounded-xl bg-gray-500/20 text-gray-400
+              hover:bg-white transition disabled:opacity-40"
           >
             {isSending ? "Sending…" : <Send size={18} />}
           </button>

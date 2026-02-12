@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import Navbar from "../components/Navbar";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 export function Profile() {
   const { UpdatingProfile, UpdateProfile, authUser } = useAuthStore();
   const [selectedImage, setSelectedImage] = useState(null);
+const navigate = useNavigate();
 
   // Current user
-  const user = authUser?? null;
+  const user = authUser ?? null;
 
   // Handle avatar upload
   const handleImageUpload = async (e) => {
@@ -46,7 +48,7 @@ export function Profile() {
           className="w-full mt-10 overflow-hidden rounded-3xl bg-white/5 backdrop-blur-2xl shadow-2xl"
         >
           {/* Banner */}
-          <div className="relative h-32 bg-gradient-to-r from-green-500/30 via-emerald-400/30 to-sky-500/30" />
+          <div className="relative h-32 bg-gradient-to-r from-gray-500/30 via-white to-gray-500/30" />
 
           {/* Profile Header */}
           <div className="relative flex flex-col items-center gap-4 px-6 pb-6 sm:flex-row sm:items-end">
@@ -101,13 +103,16 @@ export function Profile() {
               <p className="text-xs uppercase tracking-wide text-white/50">
                 Status
               </p>
-              <p className="mt-2 font-semibold text-green-400">Active</p>
+              <p className="mt-2 font-semibold text-red-400">Active</p>
             </div>
           </div>
 
           {/* Actions */}
           <div className="flex flex-col-reverse gap-3 border-t border-white/10 px-6 py-6 sm:flex-row sm:justify-end">
-            <button className="rounded-xl border border-white/20 px-6 py-2 text-sm font-medium text-white/80 transition hover:bg-white/5">
+            <button
+              onClick={() => navigate("/chat")}
+              className="rounded-xl border border-white/20 px-6 py-2 text-sm font-medium text-white/80 transition hover:bg-white/5"
+            >
               Cancel
             </button>
 
@@ -118,7 +123,7 @@ export function Profile() {
                 ${
                   UpdatingProfile
                     ? "bg-yellow-400/20 text-yellow-300"
-                    : "bg-green-400/20 text-green-400"
+                    : "bg-green-400/20 text-white"
                 }
               `}
             >

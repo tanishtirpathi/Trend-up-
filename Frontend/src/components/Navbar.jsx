@@ -21,7 +21,7 @@ const Navbar = () => {
           <div className="flex-shrink-0 flex items-center">
             <span
               onClick={() => navigate("/chat")}
-              className=" cursor-pointer text-2xl font-bold bg-gradient-to-r from-green-400 via-emerald-400 to-sky-400 bg-[length:200%_200%] animate-gradient bg-clip-text text-transparent"
+              className="cursor-pointer text-2xl font-bold bg-gradient-to-r from-gray-100 via-gray-400 to-gray-800 bg-[length:200%_200%] animate-gradient bg-clip-text text-transparent"
             >
               Trend Up
             </span>

@@ -20,9 +20,22 @@ const messageSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    seen: {
+      type: Boolean,
+      default:false,  
+    }
+   , seenAt:{
+    type:Date, 
+    default : null ,
+
+   }, 
+   expireAt: {
+    type:Date,
+    default:null
+   }
+
   },
   { timestamps: true },
 );
-messageSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400  });
 const Message = mongoose.model("Message", messageSchema);
 export default Message;

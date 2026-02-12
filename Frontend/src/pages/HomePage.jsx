@@ -1,94 +1,121 @@
 import { motion } from "framer-motion";
-import { MessageSquareLock, Lock, Globe } from "lucide-react";
+import { Shield, TimerReset, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+import {Ripple } from "../components/ui/ripple"
 export function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <div className="relative min-h-screen w-screen bg-black text-white overflow-hidden">
-      {/* 🌈 Background Glow */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-32 left-1/2 -translate-x-1/2 h-[480px] w-[480px] bg-purple-500/30 blur-[160px]" />
-        <div className="absolute bottom-20 right-20 h-[360px] w-[360px] bg-blue-500/30 blur-[160px]" />
-      </div>
+    <div className="min-h-screen w-screen bg-[#FAF9F6] text-[#111111]">
 
-      {/* 🧠 Hero Section */}
-      <div className="flex flex-col items-center justify-center text-center px-6 pt-32">
-        <motion.h1
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9 }}
-          className="text-5xl md:text-7xl font-extrabold tracking-tight"
-        >
-          Welcome to{" "}
-          <span className="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">
-            Trend Up
-          </span>
-        </motion.h1>
+      {/* Top Bar */}
+      <div className="flex justify-between items-center px-10 py-8 max-w-6xl mx-auto">
+        <h1 className="text-lg tracking-wide font-bold">
+          Trend-up
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
-          className="mt-6 max-w-2xl text-lg md:text-xl text-white/70"
-        >
-          A next-gen anonymous video calling & chatting platform.
-          <br />
-          No profiles. No identity. Just real conversations.
-        </motion.p>
-
-        {/* 🚀 CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-          className="mt-10 flex gap-4 flex-wrap justify-center"
-        >
-          <button
-            onClick={() => navigate("/login")}
-            className="px-7 py-3 rounded-2xl bg-white text-white font-semibold hover:scale-105 transition"
-          >
+        <div className="flex gap-6 text-sm text-[#6B6B6B]">
+          <button onClick={() => navigate("/login")} className="hover:text-white transition">
             Login
           </button>
           <button
             onClick={() => navigate("/signup")}
-            className="px-7 py-3 rounded-2xl bg-gradient-to-r from-green-500 to-blue-500 font-semibold hover:scale-105 transition"
+            className="px-4 py-2 border border-[#111111] rounded-full hover:bg-black hover:text-white transition"
           >
-            Get Started
+            Create Account
+          </button>
+        </div>
+      </div>
+
+      {/* Hero Section */}
+      <div className="px-6 mt-20 text-center max-w-4xl mx-auto">
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="text-xl md:text-6xl font-serif leading-tight tracking-tight"
+        >
+        <span className="text-2xl">  Conversations That</span>
+          <br />
+          Don’t Exist Tomorrow.
+        </motion.h2>
+  <Ripple />
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="mt-8 text-lg text-[#6B6B6B] max-w-2xl mx-auto"
+        >
+          End-to-end encrypted messaging with automatic deletion
+          after 15 minutes. No history. No archives. No recovery.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="mt-12"
+        >
+          <button
+            onClick={() => navigate("/signup")}
+            className="px-8 py-4 rounded-full bg-[#111111] text-white text-base tracking-wide hover:opacity-90 transition"
+          >
+            Start Secure Chat
           </button>
         </motion.div>
       </div>
 
-      {/* ✨ Feature Cards */}
-      <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-6 px-6 max-w-6xl mx-auto">
-        {[{
-          icon: <Globe size={28} />,
-          title: "Global Reach",
-          desc: "Talk to people from anywhere in the world instantly."
-        },{
-          icon: <Lock size={28} />,
-          title: "100% Anonymous",
-          desc: "No identity revealed. Your privacy is our priority."
-        },{
-          icon: <MessageSquareLock size={28} />,
-          title: "Real-Time chatting",
-          desc: "chat delete after some minute of chatting "
-        }].map((item, i) => (
+      {/* Divider Line */}
+      <div className="mt-24 border-t border-[#E4E4E4]" />
+
+      {/* Feature Section */}
+      <div className="px-6 py-20 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+
+        {[
+          {
+            icon: <Shield size={24} />,
+            title: "Encrypted by Default",
+            desc: "Every message is encrypted before it leaves your device."
+          },
+          {
+            icon: <TimerReset size={24} />,
+            title: "15-Minute Lifespan",
+            desc: "All conversations are permanently deleted after 15 minutes."
+          },
+          {
+            icon: <Lock size={24} />,
+            title: "Zero Retention Policy",
+            desc: "No stored history. No backups. No server archives."
+          }
+        ].map((item, i) => (
           <motion.div
             key={i}
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: i * 0.15 }}
+            transition={{ delay: i * 0.15 }}
             viewport={{ once: true }}
-            className="rounded-2xl bg-white/5 border border-white/10 p-6 backdrop-blur hover:bg-white/10 transition"
+            className="flex flex-col gap-4"
           >
-            <div className="mb-4 text-green-400">{item.icon}</div>
-            <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-            <p className="text-white/70 text-sm">{item.desc}</p>
+            <div className="w-10 h-10 flex items-center justify-center border border-[#111111] rounded-full">
+              {item.icon}
+            </div>
+
+            <h3 className="text-lg font-medium">
+              {item.title}
+            </h3>
+
+            <p className="text-[#6B6B6B] text-sm leading-relaxed">
+              {item.desc}
+            </p>
           </motion.div>
         ))}
       </div>
+
+      {/* Subtle Bottom Statement */}
+      <div className="text-center pb-16 text-xs tracking-widest text-[#6B6B6B]">
+        BUILT FOR PRIVACY · DESIGNED FOR DISAPPEARANCE
+      </div>
+
     </div>
   );
 }

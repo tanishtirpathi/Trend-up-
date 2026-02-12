@@ -16,13 +16,25 @@ function Sidebar() {
   }, [getUser]);
 
   // ✅ MOVE useMemo ABOVE conditional return
-  const filteredUsers = useMemo(() => {
-    return users?.filter((user) =>
-      user.name.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [users, search]);
+const filteredUsers = useMemo(() => {
+  if (!users) return [];
 
-  // ✅ NOW safe to return conditionally
+  const filtered = users.filter((user) =>
+    user.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  // Sort: Online users first
+  filtered.sort((a, b) => {
+    const aOnline = onlineUser.includes(a._id);
+    const bOnline = onlineUser.includes(b._id);
+
+    if (aOnline === bOnline) return 0; // keep same order if both same
+    return aOnline ? -1 : 1; // online first
+  });
+
+  return filtered;
+}, [users, search, onlineUser]);
+
   if (isUserLoading) return <SidebarSkeleton />;
 
   return (

@@ -12,8 +12,10 @@ export function Signup() {
     password: "",
     avatar: "",
   });
+
   const navigate = useNavigate();
   const { signUp, isSigningUp, error } = useAuthStore();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     signUp(formData);
@@ -25,13 +27,12 @@ export function Signup() {
   }
 
   return (
-    <div className="min-h-screen w-screen flex items-center justify-center bg-gradient-to-br from-black via-zinc-900 to-black px-4">
-      <MagicCard className="relative w-full max-w-md p-[1px] rounded-2xl">
-        {/* Inner Glass */}
-        <div className="w-full rounded-2xl bg-black/80 backdrop-blur-xl px-7 py-8 space-y-6 border border-white/10">
-          {/* Profile Upload */}
+    <div className="min-h-screen w-screen bg-[#F7F7F6] flex items-center justify-center px-4">
+      <MagicCard className="w-full max-w-sm">
+        <div className="bg-white border border-[#E5E5E5] rounded-xl px-6 py-6 space-y-5">
+          {/* Avatar */}
           <div className="flex justify-center">
-            <label className="relative cursor-pointer group">
+            <label className="cursor-pointer">
               <input
                 type="file"
                 value={formData.avatar}
@@ -40,17 +41,15 @@ export function Signup() {
                 className="hidden"
               />
 
-              <div className="h-24 w-24 rounded-full border-2 border-dashed border-white/20 flex items-center justify-center overflow-hidden bg-white/5 transition-all group-hover:border-green-500 group-hover:bg-green-500/10">
+              <div className="h-16 w-16 rounded-full border border-[#DADADA] flex items-center justify-center overflow-hidden bg-[#FAFAFA] hover:border-black transition">
                 {preview ? (
                   <img
                     src={preview}
-                    alt="Profile Preview"
+                    alt="Preview"
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <span className="text-xs text-zinc-400 text-center leading-tight">
-                    Upload
-                    <br />
+                  <span className="text-[10px] text-[#6B6B6B] text-center">
                     Photo
                   </span>
                 )}
@@ -59,93 +58,68 @@ export function Signup() {
           </div>
 
           {/* Header */}
-          <div className="text-center space-y-2">
-            <h2 className="text-2xl font-bold tracking-tight text-white">
-              Create your <span className="text-green-500">TrendUp</span>{" "}
-              account
-            </h2>
-            <p className="text-sm text-zinc-400">
-              One step closer to seamless video & chat experience
-            </p>
+          <div className="text-center space-y-1">
+            <p className="text-xs text-[#6B6B6B]">
+              Secure chat · Auto deletes in 15 min
+            </p>{" "}
+            <h2 className="text-4xl font-bold text-[#111]">Create Account</h2>
           </div>
 
           {/* Form */}
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            {/* Name */}
-            <div className="space-y-1.5">
-              <label className="text-xs uppercase tracking-wider text-zinc-400">
-                Full Name
-              </label>
-              <input
-                type="text"
-                placeholder="Tony Stark"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                required
-                className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-2.5 text-sm text-white placeholder-zinc-500 outline-none transition focus:border-green-500 focus:ring-1 focus:ring-green-500"
-              />
-            </div>
+          <form className="space-y-4" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Full Name"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+              required
+              className="w-full rounded-md border border-[#E5E5E5] px-3 py-2 text-sm outline-none focus:border-black"
+            />
 
-            {/* Email */}
-            <div className="space-y-1.5">
-              <label className="text-xs uppercase tracking-wider text-zinc-400">
-                Email Address
-              </label>
-              <input
-                type="email"
-                placeholder="you@trendup.com"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                required
-                className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-2.5 text-sm text-white placeholder-zinc-500 outline-none transition focus:border-green-500 focus:ring-1 focus:ring-green-500"
-              />
-            </div>
+            <input
+              type="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={(e) =>
+                setFormData({ ...formData, email: e.target.value })
+              }
+              required
+              className="w-full rounded-md border border-[#E5E5E5] px-3 py-2 text-sm outline-none focus:border-black"
+            />
 
-            {/* Password */}
-            <div className="space-y-1.5">
-              <label className="text-xs uppercase tracking-wider text-zinc-400">
-                Password
-              </label>
-              <input
-                value={formData.password}
-                type="password"
-                placeholder="Create a strong password"
-                required
-                onChange={(e) =>
-                  setFormData({ ...formData, password: e.target.value })
-                }
-                className="w-full rounded-lg border border-white/10 bg-white/10 px-4 py-2.5 text-sm text-white placeholder-zinc-500 outline-none transition focus:border-green-500 focus:ring-1 focus:ring-green-500"
-              />
-            </div>
+            <input
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={(e) =>
+                setFormData({ ...formData, password: e.target.value })
+              }
+              required
+              className="w-full rounded-md border border-[#E5E5E5] px-3 py-2 text-sm outline-none focus:border-black"
+            />
 
-            {/* CTA */}
+            {error && <div className="text-xs text-red-600">{error}</div>}
+
             <button
               disabled={isSigningUp}
               type="submit"
-              className=" flex items-center justify-center w-full rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 py-2.5 text-sm font-semibold text-black transition-all hover:brightness-110 active:scale-[0.98]"
+              className="w-full flex items-center justify-center rounded-md bg-black py-2 text-sm text-white hover:opacity-90 transition"
             >
               {isSigningUp ? (
-                <Loader className="text-white size-8" />
+                <Loader className="size-4 animate-spin" />
               ) : (
-                "Create Accounts"
+                "Create Account"
               )}
             </button>
           </form>
-          {error && (
-            <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm text-red-400">
-              {error}
-            </div>
-          )}
-          {/* Footer */}
-          <p className="text-center text-sm text-zinc-400">
-            Already have an account?{" "}
+
+          <p className="text-center text-xs text-[#6B6B6B]">
+            Already have account?{" "}
             <span
               onClick={() => navigate("/login")}
-              className="cursor-pointer text-green-500 hover:underline"
+              className="cursor-pointer text-white px-5 py-2 bg-black rounded"
             >
               Sign in
             </span>

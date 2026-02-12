@@ -12,7 +12,7 @@ function ChatSection() {
     isMessagesLoading,
     selectedUser,
     liveMessages,
-  } = useChatStore(); 
+  } = useChatStore();
   const { socket } = useAuthStore();
 
   const bottomRef = useRef(null);
@@ -65,9 +65,13 @@ function ChatSection() {
                 className={`flex ${isMe ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`relative max-w-full px-4 py-1 rounded-lg text-sm text-white
-          ${isMe ? "bg-white/20 rounded-br-sm" : "bg-white/10 rounded-bl-sm"}
-        `}
+                  className={`relative  font-serif max-w-[75%] px-4 py-2 rounded-lg text-sm
+    ${
+      isMe
+        ? "bg-[#f0fff0] text-black rounded-br-sm"
+        : "bg-[#F9F6EE] text-black rounded-bl-sm border border-black/5 shadow-sm"
+    }
+  `}
                 >
                   {msg.image && (
                     <img
@@ -82,7 +86,9 @@ function ChatSection() {
 
                   {/* Time */}
                   <div
-                    className={`mt-1 text-[11px] text-white/40 text-right select-none`}
+                    className={`mt-1 text-[11px] text-right select-none ${
+                      isMe ? "text-white/30" : "text-black/40"
+                    }`}
                   >
                     {formatTime(msg.createdAt)}
                   </div>
