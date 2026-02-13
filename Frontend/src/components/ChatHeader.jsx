@@ -12,14 +12,14 @@ function ChatHeader() {
   const isOnline = onlineUser.includes(selectedUser._id);
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-black/60 backdrop-blur-xl">
+    <div className="flex items-center justify-between px-4 py-3 border-b border-black/10 ">
       
       {/* Left section */}
       <div className="flex items-center gap-3">
         {/* Back button (mobile only) */}
         <button
           onClick={() => setSelectedUser(null)}
-          className="md:hidden text-white/70 hover:text-white"
+          className="md:hidden text-black/70 hover:text-black"
         >
           <ArrowLeft size={20} />
         </button>
@@ -40,10 +40,10 @@ function ChatHeader() {
 
         {/* Name + status */}
         <div className="leading-tight">
-          <p className="text-sm font-medium text-white">
+          <p className="text-sm font-medium text-Black font-mono">
             {selectedUser.name}
           </p>
-          <p className="text-xs text-white/50">
+          <p className="text-xs text-black/50 font-serif">
             {isOnline ? "online" : "offline"}
           </p>
         </div>

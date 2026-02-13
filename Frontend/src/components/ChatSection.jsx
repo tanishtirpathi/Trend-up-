@@ -10,16 +10,16 @@ function ChatSection() {
     unliveMessage,
     getMessages,
     isMessagesLoading,
-      markAsSeen,
+    markAsSeen,
     selectedUser,
     liveMessages,
   } = useChatStore();
-  const { socket } = useAuthStore();
 
+  const { socket } = useAuthStore();
   const bottomRef = useRef(null);
+
   const formatTime = (date) => {
     const d = new Date(date);
-
     return d.toLocaleTimeString("en-IN", {
       hour: "2-digit",
       minute: "2-digit",
@@ -35,26 +35,32 @@ function ChatSection() {
     liveMessages();
 
     return () => unliveMessage();
-  }, [selectedUser?._id, getMessages, markAsSeen , unliveMessage, liveMessages, socket]);
+  }, [
+    selectedUser?._id,
+    getMessages,
+    markAsSeen,
+    unliveMessage,
+    liveMessages,
+    socket,
+  ]);
 
-  // Auto-scroll to bottom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-full bg-black/80">
+    <div className="flex flex-col h-full bg-slate-50">
       {/* Header */}
       <ChatHeader />
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3 scrollbar-thin scrollbar-thumb-white/10">
+      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
         {isMessagesLoading ? (
-          <p className="text-center text-white/40 text-sm mt-6">
+          <p className="text-center text-slate-400 text-sm mt-6 font-serif">
             Loading messages...
           </p>
         ) : messages.length === 0 ? (
-          <p className="text-center text-white/40 text-sm mt-6">
+          <p className="text-center text-slate-400 text-sm mt-6 font-serif">
             Start the conversation 👋
           </p>
         ) : (
@@ -67,13 +73,12 @@ function ChatSection() {
                 className={`flex ${isMe ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`relative  font-serif max-w-[75%] px-4 py-2 rounded-lg text-sm
-    ${
-      isMe
-        ? "bg-[#f0fff0] text-black rounded-br-sm"
-        : "bg-[#F9F6EE] text-black rounded-bl-sm border border-black/5 shadow-sm"
-    }
-  `}
+                  className={`relative font-serif max-w-[70%] px-4 py-3 rounded-xl text-sm leading-relaxed
+                  ${
+                    isMe
+                      ? "bg-black/70 text-white rounded-br-md"
+                      : "bg-white text-slate-800 border border-slate-200 rounded-bl-md"
+                  }`}
                 >
                   {msg.image && (
                     <img
@@ -84,12 +89,12 @@ function ChatSection() {
                     />
                   )}
 
-                  {msg.text && <p className="leading-relaxed">{msg.text}</p>}
+                  {msg.text && <p>{msg.text}</p>}
 
                   {/* Time */}
                   <div
-                    className={`mt-1 text-[11px] text-right select-none ${
-                      isMe ? "text-white/30" : "text-black/40"
+                    className={`mt-2 text-[11px] text-right select-none ${
+                      isMe ? "text-white/70" : "text-slate-400"
                     }`}
                   >
                     {formatTime(msg.createdAt)}

@@ -53,7 +53,7 @@ function FooterInput() {
   };
 
   return (
-    <div className="p-4 border-t border-white/10 bg-black/60 backdrop-blur-xl">
+    <div className="p-4 border-t border-black/10 bg-white/95  ">
       {/* Image preview */}
       {imageFile && (
         <div className="mb-2 relative w-16 h-16">
@@ -65,7 +65,7 @@ function FooterInput() {
           <button
             type="button"
             onClick={removeImage}
-            className="absolute -top-2 -right-2 bg-black/80 text-white rounded-full p-1"
+            className="absolute -top-2 -right-2 bg-white/10 text-white rounded-full p-1"
           >
             <X size={14} />
           </button>
@@ -80,8 +80,8 @@ function FooterInput() {
             placeholder="Type a message..."
             value={text}
             onChange={(e) => setText(e.target.value)}
-            className="flex-1 px-4 py-3 rounded-xl bg-white/5 border border-white/10
-              text-sm text-white placeholder:text-white/40
+            className="flex-1 px-4 py-3 rounded-xl bg-black/24 border border-white/10
+              text-sm text-black placeholder:text-black/40 font-serif
               focus:outline-none focus:ring-1 focus:ring-gray-400/40"
           />
 
@@ -89,7 +89,7 @@ function FooterInput() {
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
-            className="p-2 rounded-lg hover:bg-white/10 text-white/70 hover:text-white transition"
+            className="p-2 rounded-lg bg-gray-500 hover:bg-gray-500/10 text-white/70 hover:text-white transition"
           >
             <Image size={20} />
           </button>
