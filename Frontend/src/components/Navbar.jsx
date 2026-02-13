@@ -2,78 +2,80 @@ import React, { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { logout } = useAuthStore();
   const navigate = useNavigate();
 
-  const HandleLogout = () => {
-    console.log("logging Out....");
+  const handleLogout = () => {
     logout();
   };
-  const navLinks = [{ name: "Profile", href: "/Profile" }];
+
+  const navLinks = [{ name: "Profile", href: "/profile" }];
 
   return (
-    <nav className="bg-black/90 shadow-md fixed w-full z-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          {/* Logo Section */}
-          <div className="flex-shrink-0 flex items-center">
-            <span
-              onClick={() => navigate("/chat")}
-              className="cursor-pointer text-2xl font-bold bg-gradient-to-r from-gray-100 via-gray-400 to-gray-800 bg-[length:200%_200%] animate-gradient bg-clip-text text-transparent"
-            >
-              Trend Up
-            </span>
-          </div>
+    <nav className="bg-white/90 fixed w-full z-50 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="flex justify-between items-center h-16">
+          
+          {/* Logo */}
+          <span
+            onClick={() => navigate("/chat")}
+            className="cursor-pointer text-2xl font-bold text-slate-800 hover:text-blue-600 transition"
+          >
+            Trend Up
+          </span>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex space-x-8">
+          <div className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="text-white/80 hover:text-white px-3 py-2 font-medium transition-colors"
+                className="text-slate-600 font-serif hover:text-gray-600 font-bold transition"
               >
                 {link.name}
               </a>
             ))}
+
             <button
-              onClick={HandleLogout}
-              className="bg-black/90 text-white px-4 py-1 rounded-md hover:bg-gray/50 transition"
+              onClick={handleLogout}
+              className="px-4 py-2 rounded-lg font-serif bg-blue-600 text-white hover:bg-blue-700 transition"
             >
-              logout
+              Logout
             </button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center">
+          {/* Mobile Button */}
+          <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-700 hover:text-blue-600 focus:outline-none"
+              className="text-slate-700 hover:text-blue-600 transition"
             >
-              {isOpen ? <X size={28} /> : <Menu size={28} />}
+              {isOpen ? <X size={26} /> : <Menu size={26} />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white border-t border-gray-100">
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <div className="md:hidden bg-slate-50 border-t border-slate-200">
+          <div className="px-6 py-4 space-y-3">
             {navLinks.map((link) => (
               <a
                 key={link.name}
                 href={link.href}
-                className="block text-gray-700 hover:bg-blue-50 hover:text-blue-600 px-3 py-2 rounded-md text-base font-medium"
+                className="block text-slate-600 hover:text-blue-600 font-medium"
               >
                 {link.name}
               </a>
             ))}
+
             <button
-              onClick={HandleLogout}
-              className="w-full text-left bg-blue-600 text-white px-3 py-2 rounded-md font-medium mt-4"
+              onClick={handleLogout}
+              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
             >
               Logout
             </button>

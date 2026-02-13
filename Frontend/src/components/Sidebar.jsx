@@ -28,11 +28,9 @@ function Sidebar() {
       user.name.toLowerCase().includes(search.toLowerCase())
     );
 
-    // Online users first
     filtered.sort((a, b) => {
       const aOnline = onlineUser.includes(a._id);
       const bOnline = onlineUser.includes(b._id);
-
       if (aOnline === bOnline) return 0;
       return aOnline ? -1 : 1;
     });
@@ -43,25 +41,26 @@ function Sidebar() {
   if (isUserLoading) return <SidebarSkeleton />;
 
   return (
-    <div className="h-full w-full flex flex-col bg-black/60 backdrop-blur-xl border-r border-white/10">
+    <div className="h-full w-full flex flex-col bg-slate-50 border-r border-slate-200">
+      
       {/* Header */}
-      <div className="p-4 border-b border-white/10">
-        <div className="mt-3 flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5">
-          <Search className="w-4 h-4 text-white/40" />
+      <div className="p-4 border-b border-slate-200">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-black/10 border border-slate-200">
+          <Search className="w-4 h-4 text-slate-500" />
           <input
             type="text"
             placeholder="Search user..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-transparent outline-none text-sm text-white placeholder:text-white/40 w-full"
+            className="bg-transparent outline-none text-sm text-slate-700 font-serif placeholder:text-slate-400 w-full"
           />
         </div>
       </div>
 
       {/* Users */}
-      <div className="flex-1 overflow-y-auto p-2 space-y-1 scrollbar-thin scrollbar-thumb-white/10">
+      <div className="flex-1 overflow-y-auto p-2 space-y-1">
         {filteredUsers?.length === 0 && (
-          <p className="text-center text-white/40 text-sm mt-6">
+          <p className="text-center text-slate-400 text-sm mt-6 font-serif">
             No users found
           </p>
         )}
@@ -69,6 +68,7 @@ function Sidebar() {
         {filteredUsers?.map((user) => {
           const isSelected = selectedUser?._id === user._id;
           const unread = unreadCounts?.[user._id] || 0;
+          const isOnline = onlineUser.includes(user._id);
 
           return (
             <div
@@ -76,8 +76,8 @@ function Sidebar() {
               onClick={() => setSelectedUser(user)}
               className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition ${
                 isSelected
-                  ? "bg-gradient-to-r from-emerald-500/20 to-cyan-500/20"
-                  : "hover:bg-white/5"
+                  ? "bg-white border border-slate-200 shadow-sm"
+                  : "hover:bg-white border border-transparent   "
               }`}
             >
               {/* Avatar */}
@@ -90,16 +90,14 @@ function Sidebar() {
 
                 {/* Online Dot */}
                 <span
-                  className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border border-black ${
-                    onlineUser.includes(user._id)
-                      ? "bg-green-400"
-                      : "bg-red-400"
+                  className={`absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-white ${
+                    isOnline ? "bg-emerald-500" : "bg-slate-300"
                   }`}
                 />
 
                 {/* Unread Badge */}
-                {unread > 0 && selectedUser?._id !== user._id && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center font-semibold shadow-md">
+                {unread > 0 && !isSelected && (
+                  <span className="absolute -top-1 -right-1 bg-rose-500 text-white text-[10px] min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center font-semibold">
                     {unread}
                   </span>
                 )}
@@ -107,11 +105,11 @@ function Sidebar() {
 
               {/* User Info */}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-white truncate">
+                <p className="text-sm font-medium text-slate-800 font-serif truncate">
                   {user.name}
                 </p>
-                <p className="text-xs text-white/50 truncate">
-                  {onlineUser.includes(user._id) ? "online" : "offline"}
+                <p className="text-xs text-slate-400 truncate">
+                  {isOnline ? "online" : "offline"}
                 </p>
               </div>
             </div>
