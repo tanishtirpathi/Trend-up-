@@ -37,7 +37,7 @@ const navigate = useNavigate();
   const userIdLastDigits = user?._id?.slice(-6) || "------";
 
   return (
-    <div className="min-h-screen w-screen bg-gradient-to-br from-black via-neutral-950 to-black text-white">
+    <div className="min-h-screen w-screen bg-white/95 text-black">
       <Navbar />
 
       <div className="mx-auto flex max-w-2xl justify-center px-4 py-12">
@@ -74,10 +74,10 @@ const navigate = useNavigate();
 
             {/* User Info */}
             <div className="flex-1 text-center sm:text-left">
-              <h2 className="text-3xl font-bold tracking-tight">
+              <h2 className="text-3xl font-bold tracking-tight font-serif">
                 {user?.name || "Anonymous User"}
               </h2>
-              <p className="mt-1 text-sm text-white/60">
+              <p className="mt-1 text-sm text-black/60">
                 {user?.email || "No email"}
               </p>
             </div>
@@ -85,22 +85,22 @@ const navigate = useNavigate();
 
           {/* Stats */}
           <div className="grid grid-cols-1 gap-4 px-6 py-4 sm:grid-cols-3">
-            <div className="rounded-md bg-white/5 p-5 transition hover:bg-white/10">
-              <p className="text-xs uppercase tracking-wide text-white/50">
+            <div className="rounded-md bg-black/5 p-5 transition hover:bg-black/10">
+              <p className="text-xs uppercase tracking-wide text-black/50">
                 Account Created
               </p>
               <p className="mt-2 font-semibold">{createdDate}</p>
             </div>
 
-            <div className="rounded-md bg-white/5 p-5 transition hover:bg-white/10">
-              <p className="text-xs uppercase tracking-wide text-white/50">
+            <div className="rounded-md bg-black/5 p-5 transition hover:bg-black/10">
+              <p className="text-xs uppercase tracking-wide text-black/50">
                 User ID
               </p>
               <p className="mt-2 font-semibold">****{userIdLastDigits}</p>
             </div>
 
-            <div className="rounded-md bg-white/5 p-5 transition hover:bg-white/10">
-              <p className="text-xs uppercase tracking-wide text-white/50">
+            <div className="rounded-md bg-black/5 p-5 transition hover:bg-black/10">
+              <p className="text-xs uppercase tracking-wide text-black/50">
                 Status
               </p>
               <p className="mt-2 font-semibold text-red-400">Active</p>
