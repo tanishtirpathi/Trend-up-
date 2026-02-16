@@ -5,19 +5,55 @@ import User from "../models/User.model.js";
 import { AsyncHandler } from "../config/AsyncHandler.js";
 import { uploadOnCloudinary } from "../config/cloudinary.js";
 import { getReceiveSocketId, io } from "../config/socket.js";
+//caching type system
+const cache = new Map();
+
+const CACHE_TTL = 60 * 1000; 
+
+function setCache(key, data) {
+  cache.set(key, {
+    value: data,
+    expiry: Date.now() + CACHE_TTL,
+  });
+}
+
+function getCache(key) {
+  const item = cache.get(key);
+
+  if (!item) return null;
+
+  if (Date.now() > item.expiry) {
+    cache.delete(key);
+    return null;
+  }
+
+  return item.value;
+}
+
 export const getAlLUser = AsyncHandler(async (req, res) => {
   //!logic time buddy
   //get me
-  // ge other user simple
+  // using caching also 
+  // get other user simple
   // not include me in that
   // send other users
   const ThisUser = req.user._id;
   if (!ThisUser) {
     throw new ApiError(400, "Sorry User is not authenticated ");
   }
+  const cacheKey = `allUsers_except_${ThisUser}`;
+  const cachedUsers = getCache(cacheKey);
+  if (cachedUsers) {
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "Users (from cache)", cachedUsers));
+  }
   const OtherUser = await User.find({ _id: { $ne: ThisUser } }).select(
     "-password",
-  );
+  ).lean();
+   setCache(cacheKey, OtherUser);
+
+
   // console.log(OtherUser);
   res
     .status(201)
@@ -70,8 +106,8 @@ export const sendMessage = AsyncHandler(async (req, res) => {
     receiverId: receiverId,
     text: text,
     image: imageUrl,
-    seen:false, 
-    seenAt: null ,
+    seen: false,
+    seenAt: null,
     expireAt: null,
   });
   await NewMessage.save();
@@ -83,15 +119,14 @@ export const sendMessage = AsyncHandler(async (req, res) => {
   //     io.to(socketId).emit("NewMessage", NewMessage);
   //   });
   // }
-const receiverSocketId = getReceiveSocketId(receiverId);
+  const receiverSocketId = getReceiveSocketId(receiverId);
 
-if (receiverSocketId) {
-  io.to(receiverSocketId).emit("NewMessage", NewMessage);
-  io.to(receiverSocketId).emit("newNotification", {
-  from: senderId,
-});
-
-}
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("NewMessage", NewMessage);
+    io.to(receiverSocketId).emit("newNotification", {
+      from: senderId,
+    });
+  }
 
   res
     .status(201)
@@ -105,9 +140,9 @@ export const markMessagesAsSeen = AsyncHandler(async (req, res) => {
     throw new ApiError(400, "Invalid user IDs");
   }
 
-  const now = new Date(); 
-  const fifteenMinutesLater = new Date(now.getTime() + 15* 60 * 1000);
- 
+  const now = new Date();
+  const fifteenMinutesLater = new Date(now.getTime() + 15 * 60 * 1000);
+
   const updatedMessages = await Message.updateMany(
     {
       senderId: chatUserId,
@@ -120,14 +155,10 @@ export const markMessagesAsSeen = AsyncHandler(async (req, res) => {
         seenAt: now,
         expiresAt: fifteenMinutesLater,
       },
-    }
+    },
   );
 
-  res.status(200).json(
-    new ApiResponse(
-      200,
-      "Messages marked as seen",
-      updatedMessages
-    )
-  );
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Messages marked as seen", updatedMessages));
 });

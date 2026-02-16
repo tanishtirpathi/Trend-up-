@@ -43,7 +43,7 @@ app.use(morgan("dev"));// for good visibility
 app.set("trust proxy", 1);
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
-  max: 100, // max 100 requests per IP
+  max: 10, // max 100 requests per IP
   message: {
     status: 429,
     message: "Too many requests. Try again later."
