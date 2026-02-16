@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -16,11 +16,12 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+    googleId: String,
 
     password: {
       type: String,
-      required: true,
-       select: false,
+      required: false,
+      select: false,
     },
 
     avatar: {
@@ -34,7 +35,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 userSchema.pre("save", async function () {
   if (!this.isModified("password")) return;

@@ -41,24 +41,24 @@ export const registerUser = AsyncHandler(async (req, res) => {
   await user.save();
 
   const createdUser = await User.findById(user._id).select(
-    "-password -RefreshToken"
+    "-password -RefreshToken",
   );
-const cookieOptions = {
-  httpOnly: true,
-  secure: true, // true in production (https)
-  sameSite: "None",
-};
+  const cookieOptions = {
+    httpOnly: true,
+    secure: true, // true in production (https)
+    sameSite: "None",
+  };
 
   return res
-  .status(200)
-  .cookie("accessToken", accessToken, {
-    ...cookieOptions,
-    maxAge: 15 * 60 * 1000, // 15 minutes
-  })
-  .cookie("refreshToken", refreshToken, {
-    ...cookieOptions,
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  })
+    .status(200)
+    .cookie("accessToken", accessToken, {
+      ...cookieOptions,
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    })
+    .cookie("refreshToken", refreshToken, {
+      ...cookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    })
     .json(new ApiResponse(201, "User registered successfully", createdUser));
 });
 
@@ -89,27 +89,26 @@ export const login = AsyncHandler(async (req, res) => {
   // console.log(`this is the login time accessToken ${accessToken}`);
   await user.save();
   const loggedInUser = await User.findById(user._id).select(
-    "-password -RefreshToken"
+    "-password -RefreshToken",
   );
 
   const cookieOptions = {
-  httpOnly: true,
-  secure: true, // true in production (https)
-  sameSite: "None",
-};
+    httpOnly: true,
+    secure: true, // true in production (https)
+    sameSite: "None",
+  };
 
-return res
-  .status(200)
-  .cookie("accessToken", accessToken, {
-    ...cookieOptions,
-    maxAge: 15 * 60 * 1000, // 15 minutes
-  })
-  .cookie("refreshToken", refreshToken, {
-    ...cookieOptions,
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  })
-  .json(new ApiResponse(200, "Login successful", loggedInUser));
-
+  return res
+    .status(200)
+    .cookie("accessToken", accessToken, {
+      ...cookieOptions,
+      maxAge: 15 * 60 * 1000, // 15 minutes
+    })
+    .cookie("refreshToken", refreshToken, {
+      ...cookieOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    })
+    .json(new ApiResponse(200, "Login successful", loggedInUser));
 });
 export const logout = AsyncHandler(async (req, res) => {
   //!logic time
@@ -142,9 +141,14 @@ export const logout = AsyncHandler(async (req, res) => {
   return res
     .clearCookie("accessToken", {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-    }).clearCookie("refreshToken")
+      secure: true,
+      sameSite: "None",
+    })
+    .clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    })
     .status(200)
     .json(new ApiResponse(200, "Logged out successfully"));
 });
@@ -181,7 +185,7 @@ export const UpdateUser = AsyncHandler(async (req, res) => {
     {
       $set: { avatar: avatarUpload.url },
     },
-    { new: true }
+    { new: true },
   ).select("-password -RefreshToken");
   if (!updatedUser) {
     throw new ApiError(404, "User not found");

@@ -64,6 +64,7 @@ app.get("/health", (req, res) => {
 
 app.use("/api/auth", AuthRouter); //authentication routes
 app.use("/api/messages", MessageRoute); //Message routes
+router.post("/google", googleAuth);
 app.get("/", (req, res) => {
   res.send("Backend is alive 🚀");
 });//healthCheck 
