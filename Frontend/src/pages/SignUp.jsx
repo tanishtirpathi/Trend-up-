@@ -3,7 +3,8 @@ import { MagicCard } from "../components/ui/magic-card";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Loader } from "lucide-react";
-
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 export function Signup() {
   const [preview, setPreview] = useState(null);
   const [formData, setFormData] = useState({
@@ -14,8 +15,8 @@ export function Signup() {
   });
 
   const navigate = useNavigate();
-  const { signUp, isSigningUp, error } = useAuthStore();
-
+  const { signUp, isSigningUp, error, checkAuth } = useAuthStore();
+  const BaseUrl = "http://localhost:4000";
   const handleSubmit = (e) => {
     e.preventDefault();
     signUp(formData);
@@ -124,6 +125,22 @@ export function Signup() {
               Sign in
             </span>
           </p>
+          <div className="p-1">
+            <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                await axios.post(
+                  `${BaseUrl}/api/auth/google`,
+                  { token: credentialResponse.credential },
+                  { withCredentials: true },
+                );
+                await checkAuth();
+                navigate("/");
+              }}
+              onError={() => {
+                console.log("Google login failed");
+              }}
+            />
+          </div>
         </div>
       </MagicCard>
     </div>

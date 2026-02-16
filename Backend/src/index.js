@@ -28,7 +28,13 @@ app.use(
 );
 
 // other things 
-app.use(helmet());//for sec
+app.use(
+  helmet({
+    crossOriginOpenerPolicy: false,
+    crossOriginEmbedderPolicy: false,
+  })
+);
+;//for sec
 app.use(compression());// for fast json data like compression type 
 app.use(morgan("dev"));// for good visibility 
 
@@ -64,7 +70,6 @@ app.get("/health", (req, res) => {
 
 app.use("/api/auth", AuthRouter); //authentication routes
 app.use("/api/messages", MessageRoute); //Message routes
-router.post("/google", googleAuth);
 app.get("/", (req, res) => {
   res.send("Backend is alive 🚀");
 });//healthCheck 

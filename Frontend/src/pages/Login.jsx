@@ -2,23 +2,25 @@ import { useState } from "react";
 import { MagicCard } from "../components/ui/magic-card";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
+import { GoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 export function Login() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-  const { isLoggingUp, login, error } = useAuthStore();
+
+  const BaseUrl =" http://localhost:4000"
+  const { isLoggingUp, login, error, checkAuth } = useAuthStore();
   const handleSubmit = async (e) => {
     e.preventDefault();
     login(formData);
   };
 
   return (
-     <div className="min-h-screen w-screen bg-[#EDEADE] flex items-center justify-center px-6 py-12">
-      
+    <div className="min-h-screen w-screen bg-[#EDEADE] flex items-center justify-center px-6 py-12">
       <div className="w-full max-w-md bg-white border border-[#E5E5E5] rounded-2xl p-8 sm:p-10">
-
         {/* Branding */}
         <div className="text-center mb-10">
           <h2 className="text-2xl font-bold tracking-wide text-[#111111]">
@@ -28,10 +30,8 @@ export function Login() {
             Access your private session.
           </p>
         </div>
-
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-
           {/* Email */}
           <div className="flex flex-col gap-2">
             <label
@@ -92,18 +92,28 @@ export function Login() {
             {isLoggingUp ? "Signing in..." : "Sign In"}
           </button>
         </form>
-
         {/* Footer */}
         <div className="mt-8 text-center text-sm text-[#6B6B6B]">
           No account?{" "}
-          <button
-            onClick={() => navigate("/signup")}
-            className="text-white "
-          >
+          <button onClick={() => navigate("/signup")} className="text-white ">
             Create one
           </button>
         </div>
-
+        <div className="p-1">
+        <GoogleLogin
+          onSuccess={async (credentialResponse) => {
+            await axios.post(
+              `${BaseUrl}/api/auth/google`,
+              { token: credentialResponse.credential },
+              { withCredentials: true },
+            );
+            await checkAuth();
+            navigate("/chat");
+          }}
+          onError={() => {
+            console.log("Google login failed");
+          }}
+        /></div>
       </div>
     </div>
   );
