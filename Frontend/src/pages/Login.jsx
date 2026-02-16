@@ -11,7 +11,9 @@ export function Login() {
     password: "",
   });
 
-  const BaseUrl =" http://localhost:4000"
+  //const BaseUrl =" http://localhost:4000"
+  const BaseUrl ="https://trend-up-ipbl.onrender.com"
+
   const { isLoggingUp, login, error, checkAuth } = useAuthStore();
   const handleSubmit = async (e) => {
     e.preventDefault();

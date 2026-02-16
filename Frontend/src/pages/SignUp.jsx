@@ -16,7 +16,8 @@ export function Signup() {
 
   const navigate = useNavigate();
   const { signUp, isSigningUp, error, checkAuth } = useAuthStore();
-  const BaseUrl = "http://localhost:4000";
+ //const BaseUrl = "http://localhost:4000";
+  const BaseUrl ="https://trend-up-ipbl.onrender.com"
   const handleSubmit = (e) => {
     e.preventDefault();
     signUp(formData);
