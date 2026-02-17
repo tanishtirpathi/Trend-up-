@@ -25,7 +25,7 @@ function Sidebar() {
     if (!users) return [];
 
     const filtered = users.filter((user) =>
-      user.name.toLowerCase().includes(search.toLowerCase())
+      user.name.toLowerCase().includes(search.toLowerCase()),
     );
 
     filtered.sort((a, b) => {
@@ -40,9 +40,14 @@ function Sidebar() {
 
   if (isUserLoading) return <SidebarSkeleton />;
 
+  //two days thing add
+  const TWO_DAYS_MS = 48 * 60 * 60 * 1000;
+  function isUserNew(createdAt) {
+    if (!createdAt) return false;
+    return Date.now() - new Date(createdAt).getTime() <= TWO_DAYS_MS;
+  }
   return (
     <div className="h-full w-full flex flex-col bg-slate-50 border-r border-slate-200">
-      
       {/* Header */}
       <div className="p-4 border-b border-slate-200">
         <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-black/10 border border-slate-200">
@@ -69,7 +74,7 @@ function Sidebar() {
           const isSelected = selectedUser?._id === user._id;
           const unread = unreadCounts?.[user._id] || 0;
           const isOnline = onlineUser.includes(user._id);
-
+          const isNew = isUserNew(user.createdAt);
           return (
             <div
               key={user._id}
@@ -105,9 +110,18 @@ function Sidebar() {
 
               {/* User Info */}
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-slate-800 font-serif truncate">
-                  {user.name}
-                </p>
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-medium text-slate-800 font-serif truncate">
+                    {user.name}
+                  </p>
+
+                  {isNew && (
+                    <span className="text-[10px] px-2 py-[2px] bg-blue-500 text-white rounded-full font-semibold">
+                      NEW
+                    </span>
+                  )}
+                </div>
+
                 <p className="text-xs text-slate-400 truncate">
                   {isOnline ? "online" : "offline"}
                 </p>
