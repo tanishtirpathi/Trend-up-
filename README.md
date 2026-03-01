@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://trendup.tanishtirpathi.me" target="_blank">
-    <img src="./public/OG.png" alt="Trend Up Preview" />
+    <img src="Frontend/public/OG.png" alt="Trend Up Preview" />
   </a>
 </p>
 
@@ -141,7 +141,7 @@ Recent updates include:
 
 
 ## 📸 Preview
-<p align="center"> <img src="./public/OG.png" width="700" /> </p>
+<p align="center"> <img src="Frontend/public/OG.png" width="700" /> </p>
 
 
 
