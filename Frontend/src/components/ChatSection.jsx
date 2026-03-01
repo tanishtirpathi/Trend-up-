@@ -49,67 +49,75 @@ function ChatSection() {
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-full bg-slate-50">
-      {/* Header */}
-      <ChatHeader />
+  <div className="flex flex-col h-full bg-slate-50">
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-4">
-        {isMessagesLoading ? (
-          <p className="text-center text-slate-400 text-sm mt-6 font-serif">
-            Loading messages...
-          </p>
-        ) : messages.length === 0 ? (
-          <p className="text-center text-slate-400 text-sm mt-6 font-serif">
-            Start the conversation 👋
-          </p>
-        ) : (
-          messages.map((msg) => {
-            const isMe = msg.senderId !== selectedUser._id;
+  {/* Header */}
+  <ChatHeader />
 
-            return (
+  {/* Messages */}
+  <div className="flex-1 overflow-y-auto px-3 sm:px-6 py-3 sm:py-4 space-y-3 sm:space-y-4">
+
+    {isMessagesLoading ? (
+      <p className="text-center text-slate-400 text-sm mt-6 font-serif">
+        Loading messages...
+      </p>
+    ) : messages.length === 0 ? (
+      <p className="text-center text-slate-400 text-sm mt-6 font-serif">
+        Start the conversation 👋
+      </p>
+    ) : (
+      messages.map((msg) => {
+        const isMe = msg.senderId !== selectedUser._id;
+
+        return (
+          <div
+            key={msg._id}
+            className={`flex ${isMe ? "justify-end" : "justify-start"}`}
+          >
+            <div
+              className={`relative font-serif max-w-[85%] sm:max-w-[70%]
+              px-3 sm:px-4 py-2.5 sm:py-3 rounded-2xl text-sm sm:text-base leading-relaxed
+              ${
+                isMe
+                  ? "bg-black/80 text-white rounded-br-md"
+                  : "bg-white text-slate-800 border border-slate-200 rounded-bl-md"
+              }`}
+            >
+
+              {msg.image && (
+                <img
+                  src={msg.image}
+                  alt="sent"
+                  onClick={() => window.open(msg.image, "_blank")}
+                  className="mb-2 rounded-lg max-h-52 sm:max-h-60 object-cover cursor-pointer"
+                />
+              )}
+
+              {msg.text && <p className="break-words">{msg.text}</p>}
+
+              {/* Time */}
               <div
-                key={msg._id}
-                className={`flex ${isMe ? "justify-end" : "justify-start"}`}
+                className={`mt-2 text-[10px] sm:text-[11px] text-right select-none ${
+                  isMe ? "text-white/70" : "text-slate-400"
+                }`}
               >
-                <div
-                  className={`relative font-serif max-w-[70%] px-4 py-3 rounded-xl text-sm leading-relaxed
-                  ${
-                    isMe
-                      ? "bg-black/70 text-white rounded-br-md"
-                      : "bg-white text-slate-800 border border-slate-200 rounded-bl-md"
-                  }`}
-                >
-                  {msg.image && (
-                    <img
-                      src={msg.image}
-                      alt="sent"
-                      onClick={() => window.open(msg.image, "_blank")}
-                      className="mb-2 rounded-lg max-h-60 object-cover"
-                    />
-                  )}
-
-                  {msg.text && <p>{msg.text}</p>}
-
-                  {/* Time */}
-                  <div
-                    className={`mt-2 text-[11px] text-right select-none ${
-                      isMe ? "text-white/70" : "text-slate-400"
-                    }`}
-                  >
-                    {formatTime(msg.createdAt)}
-                  </div>
-                </div>
+                {formatTime(msg.createdAt)}
               </div>
-            );
-          })
-        )}
-        <div ref={bottomRef} />
-      </div>
 
-      {/* Footer */}
-      <FooterInput />
-    </div>
+            </div>
+          </div>
+        );
+      })
+    )}
+
+    <div ref={bottomRef} />
+
+  </div>
+
+  {/* Footer */}
+  <FooterInput />
+
+</div>
   );
 }
 
