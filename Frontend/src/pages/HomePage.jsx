@@ -1,28 +1,31 @@
 import { motion } from "framer-motion";
 import { Shield, TimerReset, Lock } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import {Ripple } from "../components/ui/ripple"
+import { Ripple } from "../components/ui/ripple";
 export function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen w-screen bg-[#FAF9F6] text-[#111111]">
-
+    <div className="min-h-screen w-screen bg-[#FAF9F6] text-[#111111] overflow-x-hidden">
       {/* Top Bar */}
-      <div className="flex justify-between items-center px-10 py-8 max-w-6xl mx-auto">
-        <h1 className="text-lg tracking-wide font-bold">
+      <div className="flex justify-between items-center px-4 sm:px-4 md:px-8 lg:px-10 py-8 max-w-6xl mx-auto">
+        <h2 className="text-xl sm:text-lg md:text-2xl lg:text-2xl tracking-wide font-bold ">
           Trend-up
-        </h1>
+        </h2>
 
-        <div className="flex gap-6 text-sm text-[#6B6B6B]">
-          <button onClick={() => navigate("/login")} className="hover:text-white transition">
+        <div className="flex gap-2 sm:gap-2 md:gap-4 lg:gap-6 text-sm text-[#6B6B6B]">
+          <button
+            onClick={() => navigate("/login")}
+            className="hover:text-white transition"
+          >
             Login
           </button>
           <button
             onClick={() => navigate("/signup")}
-            className="px-4 py-2 border border-[#111111] rounded-full hover:bg-black hover:text-white transition"
+            className="px-4 py-2 border border-[#111111] rounded-full 
+            hover:bg-black hover:text-white text-xs transition"
           >
-            Create Account
+            Create 
           </button>
         </div>
       </div>
@@ -35,19 +38,19 @@ export function HomePage() {
           transition={{ duration: 0.7 }}
           className="text-xl md:text-6xl font-serif leading-tight tracking-tight"
         >
-        <span className="text-2xl">  Conversations That</span>
+          <span className="text-2xl"> Conversations That</span>
           <br />
           Don’t Exist Tomorrow.
         </motion.h2>
-  <Ripple />
+        <Ripple />
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
           className="mt-8 text-lg text-[#6B6B6B] max-w-2xl mx-auto"
         >
-          End-to-end encrypted messaging with automatic deletion
-          after 15 minutes. No history. No archives. No recovery.
+          End-to-end encrypted messaging with automatic deletion after 15
+          minutes. No history. No archives. No recovery.
         </motion.p>
 
         <motion.div
@@ -69,24 +72,23 @@ export function HomePage() {
       <div className="mt-24 border-t border-[#E4E4E4]" />
 
       {/* Feature Section */}
-      <div className="px-6 py-20 max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
-
+      <div className="px-6 py-20 max-w-6xl mx-auto grid grid-cols-3 md:grid-cols-3 gap-12">
         {[
           {
             icon: <Shield size={24} />,
             title: "Encrypted by Default",
-            desc: "Every message is encrypted before it leaves your device."
+            desc: "Every message is encrypted before it leaves your device.",
           },
           {
             icon: <TimerReset size={24} />,
             title: "15-Minute Lifespan",
-            desc: "All conversations are permanently deleted after 15 minutes."
+            desc: "All conversations are permanently deleted after 15 minutes.",
           },
           {
             icon: <Lock size={24} />,
             title: "Zero Retention Policy",
-            desc: "No stored history. No backups. No server archives."
-          }
+            desc: "No stored history. No backups. No server archives.",
+          },
         ].map((item, i) => (
           <motion.div
             key={i}
@@ -100,11 +102,9 @@ export function HomePage() {
               {item.icon}
             </div>
 
-            <h3 className="text-lg font-medium">
-              {item.title}
-            </h3>
+            <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-medium">{item.title}</h3>
 
-            <p className="text-[#6B6B6B] text-sm leading-relaxed">
+            <p className="text-[#6B6B6B] text-xs sm:text-xs md:text-sm lg:text-sm leading-relaxed">
               {item.desc}
             </p>
           </motion.div>
@@ -112,10 +112,9 @@ export function HomePage() {
       </div>
 
       {/* Subtle Bottom Statement */}
-      <div className="text-center pb-16 text-xs tracking-widest text-[#6B6B6B]">
+      <div className="text-center pb-16 text-xs px-10 tracking-widest text-[#6B6B6B]">
         BUILT FOR PRIVACY · DESIGNED FOR DISAPPEARANCE
       </div>
-
     </div>
   );
 }

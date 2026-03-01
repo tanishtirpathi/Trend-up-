@@ -15,7 +15,7 @@ const Navbar = () => {
   const navLinks = [{ name: "Profile", href: "/profile" }];
 
   return (
-    <nav className="bg-white/90 fixed w-full z-50 backdrop-blur-md">
+    <nav className="bg-white/90 fixed w-full z-50 backdrop-blur-md px-5 ">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex justify-between items-center h-16">
           
