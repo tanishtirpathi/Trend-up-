@@ -11,8 +11,8 @@ import { upload } from "../middleware/multer.middleware.js";
 import { VerifyJWT } from "../middleware/Auth.Middleware.js";
 import {googleAuth} from "../controllers/google.controller.js"
 
-import { validate } from "../middleware/validate";
-import { registerSchema, loginSchema } from "../schemas/auth.schema.js";
+import { validate } from "../middleware/validate.js";
+import { registerSchema, loginSchema } from "../config/schemas.js";
 const AuthRouter = express.Router();
 //Register Route
 AuthRouter.post("/signup", upload.single("avatar"), validate(registerSchema), registerUser);

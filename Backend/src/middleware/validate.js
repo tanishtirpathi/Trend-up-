@@ -1,22 +1,19 @@
 export const validate = (schema) => {
   return (req, res, next) => {
-    const result = schema.safeParse(req.body);
+    // When multer runs first, req.body has text fields but image is in req.file
+    // Merge them so Zod sees the full picture
+    const dataToValidate = {
+      ...req.body,
+      ...(req.file ? { image: req.file } : {}),
+    };
+
+    const result = schema.safeParse(dataToValidate);
 
     if (!result.success) {
-      // Format the errors into a clean { field: "message" } object
-      const errors = result.error.errors.reduce((acc, err) => {
-        const field = String(err.path[0] ?? "general");
-        acc[field] = err.message;
-        return acc;
-      }, {});
-
-      return res.status(400).json({
-        success: false,
-        errors,
-      });
+      const errors = result.error.flatten().fieldErrors;
+      return res.status(400).json({ success: false, errors });
     }
 
-    // Attach the validated (clean) data to req.body
     req.body = result.data;
     next();
   };

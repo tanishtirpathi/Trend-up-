@@ -5,22 +5,31 @@ import { useNavigate } from "react-router-dom";
 import { Loader } from "lucide-react";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { registerSchema } from "../lib/schema";
+
 export function Signup() {
   const [preview, setPreview] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    avatar: "",
-  });
 
   const navigate = useNavigate();
   const { signUp, isSigningUp, error, checkAuth } = useAuthStore();
- //const BaseUrl = "http://localhost:4000";
-  const BaseUrl ="https://trend-up-ipbl.onrender.com"
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    signUp(formData);
+
+  //const BaseUrl = "https://trend-up-ipbl.onrender.com";
+const BaseUrl = "https://localhost:4000";
+
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const onSubmit = (data) => {
+    signUp(data);
   };
 
   function handleImageChange(e) {
@@ -32,12 +41,12 @@ export function Signup() {
     <div className="min-h-screen w-screen bg-[#F7F7F6] flex items-center justify-center px-4">
       <MagicCard className="w-full max-w-sm">
         <div className="bg-white border border-[#E5E5E5] rounded-xl px-6 py-6 space-y-5">
+
           {/* Avatar */}
           <div className="flex justify-center">
             <label className="cursor-pointer">
               <input
                 type="file"
-                value={formData.avatar}
                 accept="image/*"
                 onChange={handleImageChange}
                 className="hidden"
@@ -63,44 +72,42 @@ export function Signup() {
           <div className="text-center space-y-1">
             <p className="text-xs text-[#6B6B6B]">
               Secure chat · Auto deletes in 15 min
-            </p>{" "}
+            </p>
             <h2 className="text-4xl font-bold text-[#111]">Create Account</h2>
           </div>
 
           {/* Form */}
-          <form className="space-y-4" onSubmit={handleSubmit}>
+          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+            
             <input
               type="text"
               placeholder="Full Name"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              required
+              {...register("name")}
               className="w-full rounded-md border border-[#E5E5E5] px-3 py-2 text-sm outline-none focus:border-black"
             />
+            {errors.name && (
+              <p className="text-xs text-red-500">{errors.name.message}</p>
+            )}
 
             <input
               type="email"
               placeholder="Email"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-              required
+              {...register("email")}
               className="w-full rounded-md border border-[#E5E5E5] px-3 py-2 text-sm outline-none focus:border-black"
             />
+            {errors.email && (
+              <p className="text-xs text-red-500">{errors.email.message}</p>
+            )}
 
             <input
               type="password"
               placeholder="Password"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-              required
+              {...register("password")}
               className="w-full rounded-md border border-[#E5E5E5] px-3 py-2 text-sm outline-none focus:border-black"
             />
+            {errors.password && (
+              <p className="text-xs text-red-500">{errors.password.message}</p>
+            )}
 
             {error && <div className="text-xs text-red-600">{error}</div>}
 
@@ -126,14 +133,16 @@ export function Signup() {
               Sign in
             </span>
           </p>
+
           <div className="p-1">
             <GoogleLogin
               onSuccess={async (credentialResponse) => {
                 await axios.post(
                   `${BaseUrl}/api/auth/google`,
                   { token: credentialResponse.credential },
-                  { withCredentials: true },
+                  { withCredentials: true }
                 );
+
                 await checkAuth();
                 navigate("/");
               }}
@@ -142,6 +151,7 @@ export function Signup() {
               }}
             />
           </div>
+
         </div>
       </MagicCard>
     </div>

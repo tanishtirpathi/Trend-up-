@@ -8,8 +8,8 @@ import {
 import { VerifyJWT } from "../middleware/Auth.Middleware.js";
 import { upload } from "../middleware/multer.middleware.js";
 
-import { validate } from "../middleware/validate";
-import { messageSchema } from "../../shared/schemas";
+import { validate } from "../middleware/validate.js";
+import { messageSchema } from "../config/schemas.js";
 
 const router = express.Router();
 router.get("/users", VerifyJWT, getAlLUser);
