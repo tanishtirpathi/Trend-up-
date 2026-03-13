@@ -10,10 +10,13 @@ import express from "express";
 import { upload } from "../middleware/multer.middleware.js";
 import { VerifyJWT } from "../middleware/Auth.Middleware.js";
 import {googleAuth} from "../controllers/google.controller.js"
+
+import { validate } from "../middleware/validate";
+import { registerSchema, loginSchema } from "../schemas/auth.schema.js";
 const AuthRouter = express.Router();
 //Register Route
-AuthRouter.post("/signup", upload.single("avatar"), registerUser);
-AuthRouter.post("/Login", login);
+AuthRouter.post("/signup", upload.single("avatar"), validate(registerSchema), registerUser);
+AuthRouter.post("/Login", validate(loginSchema), login);
 AuthRouter.post("/google", googleAuth);
 AuthRouter.get("/logout", logout);
 AuthRouter.get("/refresh", refreshAccessToken);
