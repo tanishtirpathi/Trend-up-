@@ -72,14 +72,24 @@ export const login = AsyncHandler(async (req, res) => {
   //save the refresh token
   // login the user
   const { email, password } = req.body;
+  console.log(`this is the login time email ${email} and password ${password}`);
   if (!email || !password) {
     throw new ApiError(400, "all field required ");
   }
   const user = await User.findOne({ email }).select("+password");
+  console.log(`this is the login time user ${user}`);
   if (!user) {
     throw new ApiError(409, "user not exist sorry sir");
   }
+
+  if (!user.password) {
+    return res.status(400).json({
+      message: "Login with Google instead",
+    });
+  }
+
   const MatchPassword = await user.isPasswordCorrect(password);
+  console.log(`this is the login time MatchPassword ${MatchPassword}`);
   if (!MatchPassword) {
     throw new ApiError(400, "wrong password");
   }
