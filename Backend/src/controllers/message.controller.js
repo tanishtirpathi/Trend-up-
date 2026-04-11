@@ -173,7 +173,7 @@ export const reactToMessage = AsyncHandler(async (req, res) => {
   // ! 2)  if different emoji update that
   // ! 3) if not exist add new reaction
 
-  const { id: messageId, emoji } = req.body;
+  const { messageId, emoji } = req.body;
   if (!messageId || !emoji) {
     throw new ApiError(400, "Message ID and emoji are required");
   }
@@ -190,22 +190,34 @@ export const reactToMessage = AsyncHandler(async (req, res) => {
     (reaction) => reaction.userId.toString() === userId.toString(),
   );
   if (existingReactionIndex !== -1) {
+    // Same emoji clicked again means remove (toggle off).
     if (message.reactions[existingReactionIndex].emoji === emoji) {
-      return res
-        .status(200)
-        .json(new ApiResponse(200, "Reaction already exists", message));
+      message.reactions.splice(existingReactionIndex, 1);
+    } else {
+      message.reactions[existingReactionIndex].emoji = emoji;
+      message.reactions[existingReactionIndex].reactedAt = new Date();
     }
-    message.reactions[existingReactionIndex].emoji = emoji;
   } else {
-    message.reactions.push({ userId, emoji });
+    message.reactions.push({ userId, emoji, reactedAt: new Date() });
   }
   await message.save();
 
+  const senderSocketId = getReceiveSocketId(message.senderId.toString());
+  const receiverSocketId = getReceiveSocketId(message.receiverId.toString());
 
-  //^ have to emit a socket here 
+  const payload = {
+    _id: message._id,
+    reactions: message.reactions,
+  };
+
+  if (senderSocketId) {
+    io.to(senderSocketId).emit("messageReactionUpdated", payload);
+  }
+  if (receiverSocketId && receiverSocketId !== senderSocketId) {
+    io.to(receiverSocketId).emit("messageReactionUpdated", payload);
+  }
+
   res
     .status(200)
-    .json(new ApiResponse(200, "Reaction added/updated successfully", message));
-
-
+    .json(new ApiResponse(200, "Reaction added/updated successfully", payload));
 });

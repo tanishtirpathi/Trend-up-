@@ -9,7 +9,11 @@ const server = http.createServer(app);
 // for cors
 const io = new Server(server, {
   cors: {
-    origin: ["https://trend-up.vercel.app" ,"trendup.tanishtirpathi.me","http://localhost:5173"],
+    origin: [
+      "https://trend-up.vercel.app",
+      "https://trendup.tanishtirpathi.me",
+      "http://localhost:5173",
+    ],
   },
 
 });
