@@ -3,7 +3,8 @@ import {
   getAlLUser,
   getMessages,
   sendMessage,
-  markMessagesAsSeen
+  markMessagesAsSeen,
+  reactToMessage,
 } from "../controllers/message.controller.js";
 import { VerifyJWT } from "../middleware/Auth.Middleware.js";
 import { upload } from "../middleware/multer.middleware.js";
@@ -18,4 +19,5 @@ router
   .post("/send/:id", VerifyJWT, upload.single("image"),validate(messageSchema) ,  sendMessage);
 router.put("/seen/:id", VerifyJWT, markMessagesAsSeen);
 
+router.post("/react", VerifyJWT,validate(reactSchema) , reactToMessage);
 export default router;

@@ -13,13 +13,20 @@ export const registerSchema = z.object({
     .max(50, "Password too long"),
 });
 
+
 export const loginSchema = z.object({
   email: z.string().email("Enter a valid email"),
   password: z.string().min(1, "Password is required"),
 });
+
 export const messageSchema = z.object({
   text: z.string().max(1000, "Message too long").optional(),
   image: z.any().optional(),  // multer file object, just allow it through
 }).refine(data => data.text || data.image, {
   message: "Message must have text or an image",
+});
+
+export const reactSchema = z.object({
+  messageId: z.string().min(1, "Message ID is required"),
+  emoji: z.string().min(1, "Emoji is required"),
 });

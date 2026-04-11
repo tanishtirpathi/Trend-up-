@@ -8,7 +8,7 @@ import { getReceiveSocketId, io } from "../config/socket.js";
 //caching type system
 const cache = new Map();
 
-const CACHE_TTL = 60 * 1000; 
+const CACHE_TTL = 60 * 1000;
 
 function setCache(key, data) {
   cache.set(key, {
@@ -33,7 +33,7 @@ function getCache(key) {
 export const getAlLUser = AsyncHandler(async (req, res) => {
   //!logic time buddy
   //get me
-  // using caching also 
+  // using caching also
   // get other user simple
   // not include me in that
   // send other users
@@ -48,11 +48,10 @@ export const getAlLUser = AsyncHandler(async (req, res) => {
       .status(200)
       .json(new ApiResponse(200, "Users (from cache)", cachedUsers));
   }
-  const OtherUser = await User.find({ _id: { $ne: ThisUser } }).select(
-    "-password",
-  ).lean();
-   setCache(cacheKey, OtherUser);
-
+  const OtherUser = await User.find({ _id: { $ne: ThisUser } })
+    .select("-password")
+    .lean();
+  setCache(cacheKey, OtherUser);
 
   // console.log(OtherUser);
   res
@@ -153,7 +152,7 @@ export const markMessagesAsSeen = AsyncHandler(async (req, res) => {
       $set: {
         seen: true,
         seenAt: now,
-        expiresAt: fifteenMinutesLater,
+        expireAt: fifteenMinutesLater,
       },
     },
   );
@@ -161,4 +160,52 @@ export const markMessagesAsSeen = AsyncHandler(async (req, res) => {
   res
     .status(200)
     .json(new ApiResponse(200, "Messages marked as seen", updatedMessages));
+});
+export const reactToMessage = AsyncHandler(async (req, res) => {
+  // logics for me 
+  //! get message id and emoji from req body
+  //! get user id from req.user
+  //! validate all of them 
+  // ! find the message by id
+  
+  // ! find the reaction by existing user 
+  // ! 1) if same emogy do nothing 
+  // ! 2)  if different emoji update that
+  // ! 3) if not exist add new reaction
+
+  const { id: messageId, emoji } = req.body;
+  if (!messageId || !emoji) {
+    throw new ApiError(400, "Message ID and emoji are required");
+  }
+  const userId = req.user._id;
+  if (!userId) {
+    throw new ApiError(400, "User not authenticated");
+  }
+  const message = await Message.findById(messageId);
+  if (!message) {
+    throw new ApiError(404, "Message not found");
+  }
+
+  const existingReactionIndex = message.reactions.findIndex(
+    (reaction) => reaction.userId.toString() === userId.toString(),
+  );
+  if (existingReactionIndex !== -1) {
+    if (message.reactions[existingReactionIndex].emoji === emoji) {
+      return res
+        .status(200)
+        .json(new ApiResponse(200, "Reaction already exists", message));
+    }
+    message.reactions[existingReactionIndex].emoji = emoji;
+  } else {
+    message.reactions.push({ userId, emoji });
+  }
+  await message.save();
+
+
+  //^ have to emit a socket here 
+  res
+    .status(200)
+    .json(new ApiResponse(200, "Reaction added/updated successfully", message));
+
+
 });

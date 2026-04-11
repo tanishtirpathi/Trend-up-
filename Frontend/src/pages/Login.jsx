@@ -11,7 +11,7 @@ import { loginSchema } from "../lib/schema";
 export function Login() {
   const navigate = useNavigate();
 
-  const BaseUrl = "https://trend-up-ipbl.onrender.com";
+  const BaseUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 //const BaseUrl = "https://localhost:4000";
   const { isLoggingUp, login, error, checkAuth } = useAuthStore();
 

@@ -94,7 +94,7 @@ setInterval(async () => {
     const now = new Date();
 
     const expiredMessages = await Message.find({
-      expiresAt: { $ne: null, $lte: now },
+      expireAt: { $ne: null, $lte: now },
     });
 
     if (expiredMessages.length > 0) {
