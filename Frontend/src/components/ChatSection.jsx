@@ -108,7 +108,7 @@ function ChatSection() {
                         key={emoji}
                         type="button"
                         onClick={() => ReactToMessage(msg._id, emoji)}
-                        className="text-sm px-1.5 py-0.5 rounded hover:bg-black/10 transition"
+                        className="text-xs leading-none p-0 transition hover:opacity-70"
                       >
                         {emoji}
                       </button>
@@ -121,7 +121,7 @@ function ChatSection() {
                         ([emoji, count]) => (
                           <span
                             key={emoji}
-                            className="text-xs px-2 py-0.5 rounded-full bg-black/10"
+                            className="text-[11px] leading-none"
                           >
                             {emoji} {count}
                           </span>
